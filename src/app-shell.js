@@ -12,6 +12,7 @@ import { renderUiShowcase } from './features/ui-showcase.js';
 import { createEmptyState } from './components/empty-state.js';
 import { events } from './core/events.js';
 import { initMedecinsScreen } from './features/medecins/medecins-screen.js';
+import { initPharmaciesScreen } from './features/pharmacies/pharmacies-screen.js';
 import { getLocalDb } from './core/db-local.js';
 import { TABLES } from './config/constants.js';
 
@@ -96,11 +97,8 @@ export function initAppShell(rootEl) {
   // Montage de l'écran Médecins complet (Phase 5)
   initMedecinsScreen(tabs.medecins);
 
-  tabs.pharmacies.appendChild(createEmptyState({
-    icon: '💊',
-    title: 'Visites Pharmacies',
-    description: 'Suivi des stocks, disponibilités D/ND et rotations (disponible en Phase 6).'
-  }));
+  // Montage de l'écran Pharmacies complet (Phase 6)
+  initPharmaciesScreen(tabs.pharmacies);
 
   tabs.rapport.appendChild(createEmptyState({
     icon: '📊',
