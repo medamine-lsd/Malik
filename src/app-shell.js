@@ -10,6 +10,7 @@ import { createStatCard } from './components/stat-card.js';
 import { createBottomNav } from './components/bottom-nav.js';
 import { renderUiShowcase } from './features/ui-showcase.js';
 import { createEmptyState } from './components/empty-state.js';
+import { events } from './core/events.js';
 
 export function initAppShell(rootEl) {
   rootEl.innerHTML = '';
@@ -158,14 +159,20 @@ export function initAppShell(rootEl) {
   window.addEventListener('hashchange', handleRoute);
   handleRoute();
 
-  // Écouteurs en ligne / hors-ligne pour la pastille
-  window.addEventListener('online', () => {
-    syncBadge.setState('synced');
-    statSync.setValue('OK');
-  });
-  window.addEventListener('offline', () => {
-    syncBadge.setState('offline');
-    statSync.setValue('OFF');
+  // Écoute des événements du moteur de synchronisation
+  events.on('sync-status', (status) => {
+    syncBadge.setState(status.state, status.pendingCount || 0);
+    if (status.state === 'synced') {
+      statSync.setValue('OK');
+    } else if (status.state === 'syncing') {
+      statSync.setValue('...');
+    } else if (status.state === 'pending') {
+      statSync.setValue(`${status.pendingCount} att.`);
+    } else if (status.state === 'offline') {
+      statSync.setValue('OFF');
+    } else if (status.state === 'error') {
+      statSync.setValue('ERR');
+    }
   });
 
   return {

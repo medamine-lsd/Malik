@@ -17,6 +17,8 @@ import './styles/components.css';
 import './styles/screens.css';
 
 import { initAppShell } from './app-shell.js';
+import { settings } from './core/settings.js';
+import { syncEngine } from './core/sync-engine.js';
 
 // Enregistrement PWA via Workbox (si supporté)
 if ('serviceWorker' in navigator) {
@@ -29,6 +31,12 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Chargement des préférences locales
+settings.loadFromLocal();
+
 // Initialisation de la coquille applicative
 const appRoot = document.getElementById('app');
-initAppShell(appRoot);
+const shell = initAppShell(appRoot);
+
+// Démarrage du moteur de synchronisation en arrière-plan
+syncEngine.init();
