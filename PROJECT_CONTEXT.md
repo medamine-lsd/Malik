@@ -29,8 +29,8 @@
 |---|---|---|---|
 | **Phase 0** | Lecture & validation du brief, questions bloquantes | ✅ Terminé | Brief validé. Décision client : départ avec 0 médecin/0 pharmacie pour constitution propre du portefeuille. |
 | **Phase 1** | Squelette Vite, PWA, build, vercel.json, check-filenames | ✅ Terminé | Architecture créée, icônes générées, PWA configurée, Vitest OK, build OK, Git initialisé. |
-| **Phase 2** | Design tokens, composants UI de base, navigation & coquille | ⚪ En attente | Coquille app-shell, tokens.css, composants réutilisables, page démo UI. |
-| **Phase 3** | Supabase SQL, script d'import des médecins, exécution | ⚪ En attente | — |
+| **Phase 2** | Design tokens, composants UI de base, navigation & coquille | ✅ Terminé | Tokens CSS, Base, Composants (boutons, toggle D/ND, chips, toast, modal, bottom-nav), App-shell Aura, page cachée /#/ui. |
+| **Phase 3** | Supabase SQL, script d'import des médecins, exécution | ⚪ En attente | Schéma SQL Supabase, RLS anon, configuration variables d'environnement. |
 | **Phase 4** | IndexedDB, moteur de synchro outbox, recherche en mémoire | ⚪ En attente | — |
 | **Phase 5** | Écran Médecins complet (recherche, formulaire, visite rapide, liste) | ⚪ En attente | — |
 | **Phase 6** | Écran Pharmacies complet (D/ND dynamique, ROT, historique) | ⚪ En attente | — |

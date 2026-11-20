@@ -1,0 +1,102 @@
+/**
+ * base.css — Reset CSS, conteneur mobile 480px et cercles décoratifs d'arrière-plan.
+ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--text-main);
+  background-color: var(--bg-app);
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-x: hidden;
+}
+
+/* Cadre mobile centré */
+.app-viewport {
+  position: relative;
+  width: 100%;
+  max-width: var(--container-max);
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--bg-main);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.10);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: calc(var(--nav-height) + 24px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Cercles décoratifs d'arrière-plan */
+.bg-circles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+}
+
+.circle-1 {
+  width: 260px;
+  height: 260px;
+  background: #7367F0;
+  top: -60px;
+  right: -80px;
+}
+
+.circle-2 {
+  width: 220px;
+  height: 220px;
+  background: #00F5D4;
+  top: 260px;
+  left: -80px;
+}
+
+/* Liens et boutons sans style par défaut */
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: var(--fs-md);
+  color: var(--text-main);
+}
+
+/* Utilitaires */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

@@ -1,0 +1,82 @@
+/**
+ * screens.css — Styles structurels pour les 4 écrans et la navigation par onglet.
+ */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.screen-section {
+  margin: 16px 20px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: var(--font-title);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.visit-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.visit-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.visit-card-name {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: var(--fs-md);
+  color: var(--text-main);
+}
+
+.visit-card-meta {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.visit-card-obs {
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--text-main);
+  background: var(--bg-main);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--brand-2);
+}
+
+.visit-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}

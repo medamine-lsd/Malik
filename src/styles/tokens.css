@@ -1,0 +1,84 @@
+/**
+ * tokens.css — Source unique de vérité pour tout le design de l'application.
+ * Aucun composant ne doit déclarer de couleur, d'arrondi ou d'ombre en dur.
+ */
+:root {
+  /* Couleurs de la marque AURA */
+  --bg-app:        #DDE4F0;   /* Fond externe sur grand écran */
+  --bg-main:       #F2F5FF;   /* Fond principal de l'application */
+  --bg-card:       #FFFFFF;   /* Fond des cartes */
+  --brand:         #4732C4;   /* Violet principal */
+  --brand-2:       #7367F0;   /* Violet clair pour dégradés */
+  --brand-gradient: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+  --brand-light:   rgba(71, 50, 196, 0.08);
+
+  /* Typographie & Contraste */
+  --text-main:     #2D325A;
+  --text-muted:    #8A94A6;
+  --text-on-brand: #FFFFFF;
+  --border:        rgba(45, 50, 90, 0.10);
+
+  /* Couleurs d'état & d'action */
+  --success:       #10B981;
+  --success-bg:    rgba(16, 185, 129, 0.12);
+  --accent-teal:   #00F5D4;
+  --danger:        #FF4D94;
+  --danger-bg:     rgba(255, 77, 148, 0.12);
+  --warning:       #F59E0B;
+  --warning-bg:    rgba(245, 158, 11, 0.12);
+  --offline:       #94A3B8;
+
+  /* Formes & Arrondis */
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --radius-pill: 9999px;
+
+  /* Ombres portées douces */
+  --shadow-soft:    0 10px 30px rgba(62, 50, 196, 0.08);
+  --shadow-intense: 0 15px 35px rgba(62, 50, 196, 0.16);
+  --shadow-float:   0 12px 30px rgba(45, 50, 90, 0.15);
+
+  /* Espacements */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Polices */
+  --font-title: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-body:  'Inter', system-ui, -apple-system, sans-serif;
+  --fs-xs: 0.75rem;   /* 12px */
+  --fs-sm: 0.875rem;  /* 14px */
+  --fs-md: 1rem;      /* 16px */
+  --fs-lg: 1.25rem;   /* 20px */
+  --fs-xl: 1.75rem;   /* 28px */
+
+  /* Ergonomie mobile */
+  --tap-min: 44px;
+  --container-max: 480px;
+  --nav-height: 64px;
+
+  /* Transitions */
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Thème Sombre */
+:root[data-theme='dark'] {
+  --bg-app:        #0B0D1A;
+  --bg-main:       #12142A;
+  --bg-card:       #1B1E3A;
+  --brand:         #7367F0;
+  --brand-2:       #9A8CFF;
+  --brand-light:   rgba(115, 103, 240, 0.15);
+  --text-main:     #E8EAFF;
+  --text-muted:    #9AA3C7;
+  --text-on-brand: #FFFFFF;
+  --border:        rgba(255, 255, 255, 0.10);
+  --shadow-soft:   0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-intense:0 15px 35px rgba(0, 0, 0, 0.50);
+  --shadow-float:  0 12px 30px rgba(0, 0, 0, 0.45);
+}
