@@ -13,6 +13,7 @@ import { createEmptyState } from './components/empty-state.js';
 import { events } from './core/events.js';
 import { initMedecinsScreen } from './features/medecins/medecins-screen.js';
 import { initPharmaciesScreen } from './features/pharmacies/pharmacies-screen.js';
+import { initRapportScreen } from './features/rapport/rapport-screen.js';
 import { getLocalDb } from './core/db-local.js';
 import { TABLES } from './config/constants.js';
 
@@ -100,11 +101,8 @@ export function initAppShell(rootEl) {
   // Montage de l'écran Pharmacies complet (Phase 6)
   initPharmaciesScreen(tabs.pharmacies);
 
-  tabs.rapport.appendChild(createEmptyState({
-    icon: '📊',
-    title: 'Rapport Journalier & Excel',
-    description: 'Génération du rapport officiel en 1 clic et partage WhatsApp (disponible en Phase 7).'
-  }));
+  // Montage de l'écran Rapport complet (Phase 7)
+  initRapportScreen(tabs.rapport);
 
   tabs.reglages.appendChild(createEmptyState({
     icon: '⚙️',

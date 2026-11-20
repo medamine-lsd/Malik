@@ -34,8 +34,8 @@
 | **Phase 4** | Carnet local, synchro, recherche | ✅ Terminé | IndexedDB (idb), outbox locale anti-accumulation, pull delta automatique, push par lots, recherche en mémoire < 50ms, 15 tests unitaires au vert. |
 | **Phase 5** | Écran Médecins complet | ✅ Terminé | Autocomplétion, formulaire de visite avec produits AURA, visite rapide 1-tap, contrôle anti-doublon, mise à jour de fiche, liste du jour avec modification/suppression douce. |
 | **Phase 6** | Écran Pharmacies complet | ✅ Terminé | Autocomplétion pharmacies, grille dynamique AURA D/ND et ROT, bouton Tout D/ND, pré-remplissage dernière visite, liste réactive avec isolation des modifications. |
-| **Phase 7** | Excel et partage | ⚪ En attente | Moteur Excel, écran Rapport, sélecteur de période, partage WhatsApp. |
-| **Phase 8** | Écran Réglages (produits, secteurs, grossistes, backup, sync) | ⚪ En attente | — |
+| **Phase 7** | Excel et partage | ✅ Terminé | Moteur Excel (excel-config.js + excel-export.js on-demand), format officiel 3 feuilles (RAPPORT MED, RAPPORT COM, PF), Web Share API WhatsApp, tests de layout. |
+| **Phase 8** | Écran Réglages | ⚪ En attente | Mes infos, gestion des produits AURA (couleurs/ordre), grossistes & secteurs, sauvegarde JSON, statut de synchronisation. |
 | **Phase 9** | Recette, durcissement offline, sécurité, tests, README | ⚪ En attente | — |
 | **Phase 10** | Intégration fine des maquettes graphiques finales | ⚪ En attente | — |
 
