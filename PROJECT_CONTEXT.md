@@ -27,9 +27,9 @@
 
 | Phase | Description | Statut | Notes / Livrables |
 |---|---|---|---|
-| **Phase 0** | Lecture & validation du brief, questions bloquantes | 🟡 En cours | Validation du brief, copie référence `v01`, création `PROJECT_CONTEXT.md` |
-| **Phase 1** | Squelette Vite, PWA, build, vercel.json, check-filenames | ⚪ En attente | — |
-| **Phase 2** | Design tokens, composants UI de base, navigation & coquille | ⚪ En attente | — |
+| **Phase 0** | Lecture & validation du brief, questions bloquantes | ✅ Terminé | Brief validé. Décision client : départ avec 0 médecin/0 pharmacie pour constitution propre du portefeuille. |
+| **Phase 1** | Squelette Vite, PWA, build, vercel.json, check-filenames | ✅ Terminé | Architecture créée, icônes générées, PWA configurée, Vitest OK, build OK, Git initialisé. |
+| **Phase 2** | Design tokens, composants UI de base, navigation & coquille | ⚪ En attente | Coquille app-shell, tokens.css, composants réutilisables, page démo UI. |
 | **Phase 3** | Supabase SQL, script d'import des médecins, exécution | ⚪ En attente | — |
 | **Phase 4** | IndexedDB, moteur de synchro outbox, recherche en mémoire | ⚪ En attente | — |
 | **Phase 5** | Écran Médecins complet (recherche, formulaire, visite rapide, liste) | ⚪ En attente | — |
