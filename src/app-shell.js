@@ -11,6 +11,9 @@ import { createBottomNav } from './components/bottom-nav.js';
 import { renderUiShowcase } from './features/ui-showcase.js';
 import { createEmptyState } from './components/empty-state.js';
 import { events } from './core/events.js';
+import { initMedecinsScreen } from './features/medecins/medecins-screen.js';
+import { getLocalDb } from './core/db-local.js';
+import { TABLES } from './config/constants.js';
 
 export function initAppShell(rootEl) {
   rootEl.innerHTML = '';
@@ -90,12 +93,8 @@ export function initAppShell(rootEl) {
     contentArea.appendChild(section);
   }
 
-  // Contenu d'attente soigné pour la Phase 2
-  tabs.medecins.appendChild(createEmptyState({
-    icon: '🩺',
-    title: 'Portefeuille Médecins',
-    description: 'Recherche rapide et saisie des visites médicales (disponible en Phase 5).'
-  }));
+  // Montage de l'écran Médecins complet (Phase 5)
+  initMedecinsScreen(tabs.medecins);
 
   tabs.pharmacies.appendChild(createEmptyState({
     icon: '💊',
@@ -174,6 +173,29 @@ export function initAppShell(rootEl) {
       statSync.setValue('ERR');
     }
   });
+
+  // Mise à jour automatique des compteurs du jour
+  async function refreshTodayCounters() {
+    try {
+      const db = await getLocalDb();
+      const today = todayLocal();
+
+      const medVisites = await db.getAllFromIndex(TABLES.VISITES_MEDECINS, 'date_visite', today);
+      const activeMeds = medVisites.filter(v => !v.deleted_at);
+
+      const pharmVisites = await db.getAllFromIndex(TABLES.VISITES_PHARMACIES, 'date_visite', today);
+      const activePharms = pharmVisites.filter(v => !v.deleted_at);
+
+      statTotal.setValue(activeMeds.length + activePharms.length);
+      statMed.setValue(activeMeds.length);
+      statPharm.setValue(activePharms.length);
+      bottomNav.setBadge('medecins', activeMeds.length);
+      bottomNav.setBadge('pharmacies', activePharms.length);
+    } catch {}
+  }
+
+  events.on('data-changed', refreshTodayCounters);
+  refreshTodayCounters();
 
   return {
     setGreeting: (nom) => {

@@ -32,7 +32,8 @@
 | **Phase 2** | Design tokens, composants UI de base, navigation & coquille | ✅ Terminé | Tokens CSS, Base, Composants (boutons, toggle D/ND, chips, toast, modal, bottom-nav), App-shell Aura, page cachée /#/ui. |
 | **Phase 3** | Supabase SQL, script d'import des médecins, exécution | ✅ Terminé | Schéma SQL exécuté avec succès. 9 produits AURA insérés, tables créées, RLS configuré, connexion testée et validée. |
 | **Phase 4** | Carnet local, synchro, recherche | ✅ Terminé | IndexedDB (idb), outbox locale anti-accumulation, pull delta automatique, push par lots, recherche en mémoire < 50ms, 15 tests unitaires au vert. |
-| **Phase 5** | Écran Médecins complet | ⚪ En attente | Autocomplétion, remplissage automatique, visite rapide, contrôle anti-doublon, mise à jour de fiche, liste du jour. |
+| **Phase 5** | Écran Médecins complet | ✅ Terminé | Autocomplétion, formulaire de visite avec produits AURA, visite rapide 1-tap, contrôle anti-doublon, mise à jour de fiche, liste du jour avec modification/suppression douce. |
+| **Phase 6** | Écran Pharmacies complet | ⚪ En attente | Autocomplétion pharmacies, saisie D/ND et ROT par produit AURA, Tout D/ND, pré-remplissage dernière visite, liste du jour. |
 | **Phase 4** | IndexedDB, moteur de synchro outbox, recherche en mémoire | ⚪ En attente | — |
 | **Phase 5** | Écran Médecins complet (recherche, formulaire, visite rapide, liste) | ⚪ En attente | — |
 | **Phase 6** | Écran Pharmacies complet (D/ND dynamique, ROT, historique) | ⚪ En attente | — |
