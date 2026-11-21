@@ -14,6 +14,7 @@ import { events } from './core/events.js';
 import { initMedecinsScreen } from './features/medecins/medecins-screen.js';
 import { initPharmaciesScreen } from './features/pharmacies/pharmacies-screen.js';
 import { initRapportScreen } from './features/rapport/rapport-screen.js';
+import { initReglagesScreen } from './features/reglages/reglages-screen.js';
 import { getLocalDb } from './core/db-local.js';
 import { TABLES } from './config/constants.js';
 
@@ -104,11 +105,8 @@ export function initAppShell(rootEl) {
   // Montage de l'écran Rapport complet (Phase 7)
   initRapportScreen(tabs.rapport);
 
-  tabs.reglages.appendChild(createEmptyState({
-    icon: '⚙️',
-    title: 'Paramètres & Produits',
-    description: 'Gestion de la gamme AURA, des grossistes et des secteurs (disponible en Phase 8).'
-  }));
+  // Montage de l'écran Réglages complet (Phase 8)
+  initReglagesScreen(tabs.reglages);
 
   // Page de test UI
   renderUiShowcase(tabs.ui);
