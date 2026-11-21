@@ -33,7 +33,7 @@ export function createPharmacieForm({
   // Bannière de pré-remplissage historique
   const prefillBanner = document.createElement('div');
   prefillBanner.style.cssText = `
-    display: none; background: rgba(71, 50, 196, 0.08); border-left: 3px solid var(--brand);
+    display: none; background: rgba(0, 122, 255, 0.08); border-left: 3px solid var(--brand);
     padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 14px;
     font-size: 12px; color: var(--brand); font-weight: 600;
   `;

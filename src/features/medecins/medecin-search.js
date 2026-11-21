@@ -1,8 +1,8 @@
 /**
  * medecin-search.js — Index de recherche en mémoire ultra-rapide (< 50 ms).
  * Construit un index local à chaque mise à jour des médecins.
- * Reçoit : requête textuelle de recherche (nom, spécialité, secteur, etc.).
- * Renvoie : liste ordonnée des médecins correspondants (max 8 résultats).
+ * Reçoit : requête textuelle, limite, filtre de spécialité, exclusion des médecins déjà visités.
+ * Renvoie : liste ordonnée des médecins correspondants.
  */
 import { normalize } from '../../core/text.js';
 
@@ -29,24 +29,46 @@ export function buildSearchIndex(medecinsList = []) {
 }
 
 /**
- * Effectue une recherche instantanée sur l'index en mémoire.
+ * Effectue une recherche instantanée sur l'index en mémoire avec filtres optionnels.
+ * @param {string} query Texte recherché
+ * @param {number} limit Nombre maximum de résultats (défaut 8)
+ * @param {object} options { specialiteFilter: string, excludeIds: Set|Array }
  */
-export function searchMedecins(query = '', limit = 8) {
-  const rawTrimmed = String(query).trim().toLowerCase();
-  if (!rawTrimmed) return [];
-
+export function searchMedecins(query = '', limit = 8, { specialiteFilter = '', excludeIds = null } = {}) {
+  const excludeSet = excludeIds instanceof Set ? excludeIds : (Array.isArray(excludeIds) ? new Set(excludeIds) : null);
+  const rawTrimmed = String(query || '').trim().toLowerCase();
   const normQuery = normalize(rawTrimmed);
   const words = (normQuery || rawTrimmed).split(/\s+/).filter(Boolean);
 
-  if (words.length === 0) return [];
+  const filterSpecNorm = specialiteFilter && specialiteFilter !== 'TOUS' ? normalize(specialiteFilter) : '';
 
   const matches = [];
 
   for (const item of searchIndex) {
-    // Tous les mots saisis doivent être présents
+    // 1. Exclusion des médecins déjà visités aujourd'hui si demandé
+    if (excludeSet && excludeSet.has(item.id)) {
+      continue;
+    }
+
+    // 2. Filtre par spécialité si actif
+    if (filterSpecNorm) {
+      const itemSpecNorm = normalize(item.specialite);
+      if (!itemSpecNorm.includes(filterSpecNorm)) {
+        continue;
+      }
+    }
+
+    // 3. Si aucun mot saisi mais un filtre spécialité est actif, on inclut directement
+    if (words.length === 0) {
+      if (filterSpecNorm) {
+        matches.push({ score: 10, item });
+      }
+      continue;
+    }
+
+    // 4. Tous les mots saisis doivent être présents
     const matchesAll = words.every(w => item.haystack.includes(w));
     if (matchesAll) {
-      // Calcul du score de pertinence
       let score = 3;
       const normNom = normalize(item.nom);
 

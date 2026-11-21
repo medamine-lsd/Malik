@@ -1,5 +1,5 @@
 /**
- * base.css — Reset CSS, conteneur mobile 480px et cercles décoratifs d'arrière-plan.
+ * base.css — Reset CSS, conteneur mobile fluide et cercles d'arrière-plan bleus.
  */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -12,7 +12,7 @@ html, body {
   width: 100%;
   min-height: 100%;
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.45;
   color: var(--text-main);
   background-color: var(--bg-app);
@@ -25,7 +25,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Cadre mobile centré */
+/* Cadre mobile centré & ajusté aux téléphones */
 .app-viewport {
   position: relative;
   width: 100%;
@@ -33,14 +33,21 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   background-color: var(--bg-main);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
   padding-bottom: calc(var(--nav-height) + 24px + env(safe-area-inset-bottom, 0px));
 }
 
-/* Cercles décoratifs d'arrière-plan */
+@media (max-width: 480px) {
+  .app-viewport {
+    box-shadow: none;
+    max-width: 100%;
+  }
+}
+
+/* Cercles décoratifs d'arrière-plan bleus */
 .bg-circles {
   position: absolute;
   top: 0;
@@ -55,14 +62,14 @@ body {
 .circle {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.4;
+  filter: blur(70px);
+  opacity: 0.3;
 }
 
 .circle-1 {
   width: 260px;
   height: 260px;
-  background: #7367F0;
+  background: #007AFF;
   top: -60px;
   right: -80px;
 }
@@ -70,7 +77,7 @@ body {
 .circle-2 {
   width: 220px;
   height: 220px;
-  background: #00F5D4;
+  background: #00C6FF;
   top: 260px;
   left: -80px;
 }
@@ -89,6 +96,21 @@ input, select, textarea {
   color: var(--text-main);
 }
 
+/* Placeholders presque invisibles (très discrets comme demandé) */
+::placeholder {
+  color: var(--text-placeholder) !important;
+  opacity: 0.55 !important;
+  font-weight: 400 !important;
+}
+
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: var(--text-placeholder) !important;
+  opacity: 0.55 !important;
+  font-weight: 400 !important;
+}
+
 /* Utilitaires */
 .sr-only {
   position: absolute;
@@ -98,5 +120,4 @@ input, select, textarea {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
-  border: 0;
 }

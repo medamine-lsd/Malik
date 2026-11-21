@@ -1,9 +1,11 @@
 /**
  * medecins-screen.js — Écran complet de gestion des médecins et des visites médicales.
- * Regroupe la recherche instantanée (Zone 1), le formulaire de visite (Zone 2)
- * et la liste des visites du jour avec modification/suppression (Zone 3).
- * Reçoit : conteneur de l'onglet #tab-medecins.
- * Renvoie : interface connectée et réactive en temps réel.
+ * Conforme à la maquette de référence (Photo 4) :
+ * - Barre de recherche compacte avec bouton validation ✔ et nouveau médecin 👤+
+ * - Filtres rapides de spécialités au-dessus/sous la recherche
+ * - Exclusion stricte des médecins déjà visités aujourd'hui
+ * - Formulaire de visite ouvert par défaut
+ * - Historique du jour moderne
  */
 import { createAutocomplete } from '../../components/autocomplete.js';
 import { createMedecinForm } from './medecin-form.js';
@@ -11,10 +13,8 @@ import { buildSearchIndex, searchMedecins } from './medecin-search.js';
 import { medecinsRepo } from './medecins-repo.js';
 import { showToast } from '../../components/toast.js';
 import { showConfirmModal } from '../../components/confirm-modal.js';
-import { createButton } from '../../components/button.js';
-import { createEmptyState } from '../../components/empty-state.js';
 import { todayLocal } from '../../core/dates.js';
-import { escapeHtml } from '../../core/text.js';
+import { escapeHtml, normalize } from '../../core/text.js';
 import { events } from '../../core/events.js';
 import { getLocalDb } from '../../core/db-local.js';
 import { TABLES } from '../../config/constants.js';
@@ -24,42 +24,114 @@ export function initMedecinsScreen(container) {
 
   let currentDate = todayLocal();
   let allProduitsMap = new Map();
+  let todayVisitedMedecinIds = new Set();
+  let todayVisitedNames = new Set();
+  let activeSpecFilter = 'TOUS';
 
-  // 1. ZONE 1 — BARRE DE RECHERCHE
+  // 1. ZONE 1 — BARRE DE RECHERCHE + BOUTONS D'ACTION (Photo 4)
   const searchSection = document.createElement('div');
   searchSection.className = 'screen-section';
-  searchSection.style.marginBottom = '16px';
+  searchSection.style.marginBottom = '8px';
 
-  const searchHeader = document.createElement('div');
-  searchHeader.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;';
-  searchHeader.innerHTML = `
-    <span style="font-weight: 700; font-size: 15px; color: var(--text-main);">Recherche Médecin</span>
-    <button type="button" id="btn-new-med-direct" style="font-size: 13px; font-weight: 700; color: var(--brand); cursor: pointer; background: none; border: none;">
-      ➕ Nouveau médecin
-    </button>
-  `;
-  searchSection.appendChild(searchHeader);
+  // Ligne de recherche : Input + Bouton ✔ + Bouton 👤+
+  const searchRow = document.createElement('div');
+  searchRow.className = 'search-row';
+
+  const autocompleteWrapper = document.createElement('div');
+  autocompleteWrapper.style.cssText = 'flex: 1; min-width: 0;';
 
   const autocomplete = createAutocomplete({
-    placeholder: 'Nom du médecin, spécialité, lieu (ex: Benali)...',
-    onSearch: (query) => searchMedecins(query, 8),
+    placeholder: 'Taper le nom...',
+    onSearch: (query) => searchMedecins(query, 8, {
+      specialiteFilter: activeSpecFilter,
+      excludeIds: todayVisitedMedecinIds
+    }),
     onSelect: (medecin) => {
       form.loadMedecin(medecin);
+      autocomplete.clear();
     },
     onAddNew: (queryText) => {
-      form.loadNewMedecin(queryText);
+      form.loadNewMedecin(queryText, activeSpecFilter !== 'TOUS' ? activeSpecFilter : '');
+      autocomplete.clear();
     }
   });
-  searchSection.appendChild(autocomplete.element);
-  container.appendChild(searchSection);
+  autocompleteWrapper.appendChild(autocomplete.element);
+  searchRow.appendChild(autocompleteWrapper);
 
-  // Bouton direct « Nouveau médecin »
-  searchSection.querySelector('#btn-new-med-direct').addEventListener('click', () => {
-    autocomplete.clear();
-    form.loadNewMedecin('');
+  // Bouton Validation rapide ✔ (Photo 4)
+  const checkBtn = document.createElement('button');
+  checkBtn.type = 'button';
+  checkBtn.className = 'btn-icon-sq btn-check';
+  checkBtn.innerHTML = '✔';
+  checkBtn.title = 'Valider / Enregistrer la visite';
+  checkBtn.addEventListener('click', () => {
+    form.submit();
+  });
+  searchRow.appendChild(checkBtn);
+
+  // Bouton Nouveau Médecin avec remplissage moderne 👤+ (Photo 4 - Exigence 8)
+  const addMedBtn = document.createElement('button');
+  addMedBtn.type = 'button';
+  addMedBtn.className = 'btn-icon-sq btn-add-med';
+  addMedBtn.innerHTML = `
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+      <circle cx="8.5" cy="7" r="4"></circle>
+      <line x1="20" y1="8" x2="20" y2="14"></line>
+      <line x1="23" y1="11" x2="17" y2="11"></line>
+    </svg>
+  `;
+  addMedBtn.title = 'Nouveau médecin (ouvrir/fermer formulaire)';
+  addMedBtn.addEventListener('click', () => {
+    if (form.isOpen()) {
+      form.toggle();
+    } else {
+      autocomplete.clear();
+      form.loadNewMedecin('', activeSpecFilter !== 'TOUS' ? activeSpecFilter : '');
+    }
+  });
+  searchRow.appendChild(addMedBtn);
+
+  searchSection.appendChild(searchRow);
+
+  // Barre de filtres de spécialité (Exigence 7)
+  const filterBar = document.createElement('div');
+  filterBar.className = 'spec-filter-bar';
+
+  const specsList = ['TOUS', 'PED', 'PEDL', 'MG', 'MGL', 'VACC', 'GY', 'DT'];
+  const filterPillEls = {};
+
+  specsList.forEach(spec => {
+    const pill = document.createElement('button');
+    pill.type = 'button';
+    pill.className = `spec-filter-pill ${spec === activeSpecFilter ? 'active' : ''}`;
+    pill.textContent = spec;
+    pill.addEventListener('click', () => {
+      setSpecFilter(spec);
+    });
+    filterBar.appendChild(pill);
+    filterPillEls[spec] = pill;
   });
 
-  // 2. ZONE 2 — CARTE FORMULAIRE DE VISITE
+  function setSpecFilter(spec) {
+    activeSpecFilter = spec;
+    Object.keys(filterPillEls).forEach(k => {
+      if (k === activeSpecFilter) {
+        filterPillEls[k].classList.add('active');
+      } else {
+        filterPillEls[k].classList.remove('active');
+      }
+    });
+
+    if (activeSpecFilter !== 'TOUS') {
+      form.setSpecialite(activeSpecFilter);
+    }
+  }
+
+  searchSection.appendChild(filterBar);
+  container.appendChild(searchSection);
+
+  // 2. ZONE 2 — FORMULAIRE DE VISITE (OUVERT PAR DÉFAUT - Photo 4)
   const form = createMedecinForm({
     onSaveVisite: async (res) => {
       if (res.error) {
@@ -78,27 +150,43 @@ export function initMedecinsScreen(container) {
   });
   container.appendChild(form.element);
 
-  // 3. ZONE 3 — LISTE DES VISITES DU JOUR
+  // 3. ZONE 3 — HISTORIQUE DU JOUR (Photo 4)
   const listSection = document.createElement('div');
   listSection.className = 'screen-section';
+  listSection.style.marginTop = '16px';
   listSection.innerHTML = `
     <div class="section-header">
-      <h3 class="section-title">Visites du jour (<span id="med-visit-count">0</span>)</h3>
+      <h3 class="section-title">Historique du jour</h3>
+      <span id="med-visit-badge" style="font-size: 12px; font-weight: 700; background: var(--brand-light); color: var(--brand); padding: 3px 8px; border-radius: 999px;">0 visite</span>
     </div>
     <div id="med-visits-list"></div>
   `;
   container.appendChild(listSection);
 
   const visitsListEl = listSection.querySelector('#med-visits-list');
-  const countEl = listSection.querySelector('#med-visit-count');
+  const visitBadgeEl = listSection.querySelector('#med-visit-badge');
 
   /**
-   * Sauvegarde standard d'une visite avec anti-doublon et avertissement de visite répétée.
+   * Sauvegarde standard d'une visite avec anti-doublon et exclusion des visites répétées le même jour.
    */
   async function handleSaveVisite(data) {
     let medecinId = data.medecin_id;
 
-    // A. Si c'est un nouveau médecin, contrôle anti-doublon
+    // Règle 6 : Interdiction formelle de visiter 2 fois le même médecin le même jour
+    if (!data.id) {
+      if (medecinId && todayVisitedMedecinIds.has(medecinId)) {
+        showToast({ message: '⚠️ Ce médecin a déjà été visité aujourd’hui !', type: 'error' });
+        return;
+      }
+
+      const normName = normalize(data.nom);
+      if (todayVisitedNames.has(normName)) {
+        showToast({ message: '⚠️ Ce médecin a déjà été visité aujourd’hui !', type: 'error' });
+        return;
+      }
+    }
+
+    // A. Si c'est un nouveau médecin, contrôle anti-doublon dans le carnet
     if (!medecinId) {
       const duplicate = await medecinsRepo.findDuplicate(data.nom, data.specialite);
       if (duplicate) {
@@ -160,47 +248,17 @@ export function initMedecinsScreen(container) {
       });
     }
 
-    // C. Vérification si déjà visité aujourd'hui
-    if (!data.id) { // Uniquement en création, pas en modification
-      const alreadyVisited = await medecinsRepo.hasVisitedOnDate(medecinId, data.date_visite);
-      if (alreadyVisited) {
-        showConfirmModal({
-          title: 'Médecin déjà visité aujourd’hui',
-          message: `Vous avez déjà enregistré une visite aujourd'hui pour ${data.nom}. Souhaitez-vous en ajouter une deuxième ?`,
-          confirmText: 'Ajouter quand même',
-          cancelText: 'Annuler',
-          onConfirm: async () => {
-            await proceedSaveVisite(data);
-          }
-        });
-        return;
-      }
-    }
-
     await proceedSaveVisite(data);
   }
 
-  /**
-   * Visite rapide (1 tap).
-   */
   async function handleQuickVisit(data) {
     if (!data.medecin_id) {
-      showToast({ message: 'Veuillez sélectionner un médecin pour la visite rapide', type: 'error' });
+      showToast({ message: 'Veuillez sélectionner un médecin pour la visite', type: 'error' });
       return;
     }
 
-    const alreadyVisited = await medecinsRepo.hasVisitedOnDate(data.medecin_id, todayLocal());
-    if (alreadyVisited) {
-      showConfirmModal({
-        title: 'Déjà visité aujourd’hui',
-        message: `${data.nom} a déjà été visité aujourd'hui. Ajouter une nouvelle visite rapide ?`,
-        confirmText: 'Ajouter',
-        cancelText: 'Annuler',
-        onConfirm: async () => {
-          data.observation = '';
-          await proceedSaveVisite(data);
-        }
-      });
+    if (todayVisitedMedecinIds.has(data.medecin_id)) {
+      showToast({ message: '⚠️ Ce médecin a déjà été visité aujourd’hui !', type: 'error' });
       return;
     }
 
@@ -233,7 +291,7 @@ export function initMedecinsScreen(container) {
   }
 
   /**
-   * Recharge la liste des visites du jour et l'index de recherche.
+   * Recharge la liste des visites du jour, l'index de recherche et les exclusions.
    */
   async function refreshAll() {
     // 1. Charger la carte des produits pour colorer les pastilles
@@ -244,23 +302,31 @@ export function initMedecinsScreen(container) {
       allProduitsMap.set(p.id, p);
     }
 
-    // 2. Reconstruire l'index de recherche
-    const allMeds = await medecinsRepo.getAllMedecins();
-    buildSearchIndex(allMeds);
-
-    // 3. Charger les visites du jour
+    // 2. Charger les visites du jour pour construire la liste d'exclusion
     const visites = await medecinsRepo.getVisitesByDate(currentDate);
     visites.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
 
-    countEl.textContent = visites.length;
+    todayVisitedMedecinIds.clear();
+    todayVisitedNames.clear();
+
+    visites.forEach(v => {
+      if (v.medecin_id) todayVisitedMedecinIds.add(v.medecin_id);
+      if (v.nom) todayVisitedNames.add(normalize(v.nom));
+    });
+
+    // 3. Reconstruire l'index de recherche
+    const allMeds = await medecinsRepo.getAllMedecins();
+    buildSearchIndex(allMeds);
+
+    // 4. Mettre à jour l'affichage de l'historique du jour
+    visitBadgeEl.textContent = `${visites.length} visite${visites.length > 1 ? 's' : ''}`;
 
     visitsListEl.innerHTML = '';
     if (visites.length === 0) {
-      visitsListEl.appendChild(createEmptyState({
-        icon: '🩺',
-        title: 'Aucune visite médecin aujourd’hui',
-        description: 'Recherchez un médecin ou cliquez sur « ➕ Nouveau médecin » ci-dessus pour commencer votre saisie.'
-      }));
+      const emptyDiv = document.createElement('div');
+      emptyDiv.style.cssText = 'text-align: center; padding: 24px 16px; color: var(--text-muted); font-size: 14px;';
+      emptyDiv.textContent = 'Aucune visite aujourd’hui';
+      visitsListEl.appendChild(emptyDiv);
       return;
     }
 
@@ -275,14 +341,14 @@ export function initMedecinsScreen(container) {
           v.produits_discutes.map(pid => {
             const p = allProduitsMap.get(pid);
             if (!p) return '';
-            const hex = p.couleur ? (p.couleur.startsWith('#') ? p.couleur : `#${p.couleur}`) : '#4F81BD';
-            return `<span style="font-size: 11px; font-weight: 700; background: ${hex}20; color: ${hex}; border: 1px solid ${hex}40; padding: 2px 8px; border-radius: 999px;">${escapeHtml(p.nom)}</span>`;
+            const hex = p.couleur ? (p.couleur.startsWith('#') ? p.couleur : `#${p.couleur}`) : '#007AFF';
+            return `<span style="font-size: 11px; font-weight: 700; background: ${hex}18; color: ${hex}; border: 1px solid ${hex}35; padding: 2px 8px; border-radius: 999px;">${escapeHtml(p.nom)}</span>`;
           }).join('') +
           '</div>';
       }
 
-      const potBadge = v.pot ? `<span style="font-size: 10px; background: rgba(71, 50, 196, 0.1); color: var(--brand); padding: 2px 6px; border-radius: 999px; font-weight: 700;">${escapeHtml(v.pot)}</span>` : '';
-      const statutBadge = v.statut ? `<span style="font-size: 10px; background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 2px 6px; border-radius: 999px; font-weight: 700;">${escapeHtml(v.statut)}</span>` : '';
+      const potBadge = v.pot ? `<span style="font-size: 10px; background: rgba(0, 122, 255, 0.1); color: var(--brand); padding: 2px 7px; border-radius: 999px; font-weight: 800;">${escapeHtml(v.pot)}</span>` : '';
+      const statutBadge = v.statut ? `<span style="font-size: 10px; background: rgba(16, 185, 129, 0.12); color: var(--success); padding: 2px 7px; border-radius: 999px; font-weight: 800;">${escapeHtml(v.statut)}</span>` : '';
 
       card.innerHTML = `
         <div class="visit-card-header">
@@ -294,7 +360,7 @@ export function initMedecinsScreen(container) {
               ${v.etab ? `<span>(${escapeHtml(v.etab)})</span>` : ''}
             </div>
           </div>
-          <div style="display: flex; gap: 4px;">
+          <div style="display: flex; gap: 4px; align-items: center;">
             ${potBadge}${statutBadge}
           </div>
         </div>
@@ -311,10 +377,9 @@ export function initMedecinsScreen(container) {
       // Modifier la visite
       card.querySelector('.btn-edit').addEventListener('click', () => {
         form.loadVisiteForEdit(v);
-        window.scrollTo({ top: form.element.offsetTop - 20, behavior: 'smooth' });
       });
 
-      // Supprimer la visite (suppression douce + annuler)
+      // Supprimer la visite
       card.querySelector('.btn-del').addEventListener('click', async () => {
         await medecinsRepo.deleteVisite(v.id);
         await refreshAll();

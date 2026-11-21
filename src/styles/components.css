@@ -1,63 +1,40 @@
 /**
- * components.css — Styles pour tous les composants réutilisables.
+ * components.css — Styles pour tous les composants réutilisables (Bleu AURA Moderne).
  */
 
 /* =====================================================================
-   1. EN-TÊTE MOBILE (HEADER AURA)
+   1. EN-TÊTE MOBILE ÉPURÉ & COMPACT (REMPLACE LE GROS BANDEAU)
    ===================================================================== */
-.app-header {
-  position: relative;
-  z-index: 2;
-  background: var(--brand-gradient);
-  color: var(--text-on-brand);
-  padding: 20px 20px 24px;
-  border-bottom-left-radius: var(--radius-xl);
-  border-bottom-right-radius: var(--radius-xl);
-  box-shadow: var(--shadow-intense);
-}
-
-.header-top {
+.app-header-compact {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  padding: 16px 16px 8px;
+  position: relative;
+  z-index: 10;
 }
 
-.logo-text {
+.header-tab-title {
   font-family: var(--font-title);
   font-size: var(--fs-lg);
   font-weight: 800;
-  letter-spacing: -0.5px;
+  color: var(--text-main);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  letter-spacing: -0.3px;
 }
 
-.logo-text span {
-  font-weight: 400;
-  opacity: 0.85;
+.header-tab-subtitle {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-weight: 500;
 }
 
-.logo-badge {
-  background: rgba(255, 255, 255, 0.2);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: var(--radius-pill);
-  text-transform: uppercase;
-}
-
-.header-welcome h1 {
-  font-family: var(--font-title);
-  font-size: var(--fs-xl);
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.header-welcome p {
-  font-size: var(--fs-sm);
-  opacity: 0.9;
-  margin-top: 4px;
+/* Ancien bandeau gardé pour compatibilité si nécessaire */
+.app-header {
+  display: none;
 }
 
 /* =====================================================================
@@ -69,18 +46,18 @@
   gap: 6px;
   padding: 6px 12px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-  color: white;
+  background: var(--bg-card);
+  color: var(--text-main);
   font-size: var(--fs-xs);
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
   transition: var(--transition);
 }
 
 .sync-badge:hover {
-  background: rgba(255, 255, 255, 0.28);
+  border-color: var(--brand);
 }
 
 .sync-dot {
@@ -113,66 +90,15 @@
 }
 
 /* =====================================================================
-   3. GRILLE DE STATISTIQUES (4 CARTES)
-   ===================================================================== */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 16px 20px 8px;
-  position: relative;
-  z-index: 2;
-}
-
-.stat-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  transition: var(--transition);
-}
-
-.stat-card.featured {
-  background: var(--brand-gradient);
-  color: var(--text-on-brand);
-  border: none;
-  box-shadow: 0 10px 25px rgba(71, 50, 196, 0.28);
-}
-
-.stat-val {
-  font-family: var(--font-title);
-  font-size: var(--fs-xl);
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.stat-label {
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.stat-card.featured .stat-label {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-/* =====================================================================
-   4. CARTES ET FORMULAIRES
+   3. CARTES ET FORMULAIRES
    ===================================================================== */
 .card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 20px;
-  box-shadow: var(--shadow-soft);
+  padding: 16px 16px 20px;
+  box-shadow: var(--shadow-card);
   border: 1px solid var(--border);
-  margin: 0 20px 16px;
+  margin: 0 14px 16px;
   position: relative;
   z-index: 1;
 }
@@ -182,14 +108,14 @@
   font-size: var(--fs-md);
   font-weight: 700;
   color: var(--text-main);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .field-group {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .field-label {
@@ -197,7 +123,7 @@
   font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--text-main);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .field-label .req {
@@ -207,7 +133,7 @@
 
 .field-input, .field-select, .field-textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 13px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--bg-main);
@@ -216,6 +142,7 @@
   transition: var(--transition);
   font-size: var(--fs-md);
   min-height: var(--tap-min);
+  box-sizing: border-box;
 }
 
 .field-input:focus, .field-select:focus, .field-textarea:focus {
@@ -235,8 +162,149 @@
   margin-top: 4px;
 }
 
+/* Grille 2 colonnes pour formulaires compacts */
+.field-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.field-row-2 .field-group {
+  margin-bottom: 0;
+}
+
 /* =====================================================================
-   5. BOUTONS
+   4. POTENTIEL : SÉLECTEUR EN PETITS CARRÉS [ A ] [ B ] [ C ]
+   ===================================================================== */
+.pot-container {
+  margin-bottom: 14px;
+}
+
+.pot-squares {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.pot-square {
+  width: 46px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-family: var(--font-title);
+  font-size: var(--fs-md);
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-soft);
+  user-select: none;
+}
+
+.pot-square:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.pot-square.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.35);
+  transform: scale(1.02);
+}
+
+/* =====================================================================
+   5. BARRE DE RECHERCHE + BOUTONS D'ACTION (Photo de référence 4)
+   ===================================================================== */
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.btn-icon-sq {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-weight: 700;
+}
+
+.btn-icon-sq:active {
+  transform: scale(0.95);
+}
+
+.btn-icon-sq.btn-check {
+  background: var(--success);
+  color: #FFFFFF;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.btn-icon-sq.btn-add-med {
+  background: var(--brand);
+  color: #FFFFFF;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
+}
+
+/* Barre de filtres de spécialités au-dessus/sous la recherche */
+.spec-filter-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 0 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.spec-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.spec-filter-pill {
+  flex-shrink: 0;
+  padding: 6px 13px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-title);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-soft);
+  user-select: none;
+}
+
+.spec-filter-pill:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.spec-filter-pill.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(0, 122, 255, 0.3);
+}
+
+/* =====================================================================
+   6. BOUTONS
    ===================================================================== */
 .btn {
   display: inline-flex;
@@ -262,7 +330,7 @@
 .btn-primary {
   background: var(--brand-gradient);
   color: var(--text-on-brand);
-  box-shadow: 0 8px 20px rgba(71, 50, 196, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 122, 255, 0.25);
 }
 
 .btn-secondary {
@@ -300,7 +368,7 @@
 }
 
 /* =====================================================================
-   6. INTERRUPTEUR D / ND (GLASS TOGGLE)
+   7. INTERRUPTEUR D / ND (GLASS TOGGLE)
    ===================================================================== */
 .toggle-dn {
   display: inline-flex;
@@ -340,7 +408,7 @@
 }
 
 /* =====================================================================
-   7. CHIPS / PASTILLES DE PRODUITS
+   8. CHIPS / PASTILLES DE PRODUITS
    ===================================================================== */
 .chip-container {
   display: flex;
@@ -374,11 +442,11 @@
   background: var(--brand);
   color: #FFFFFF;
   border-color: var(--brand);
-  box-shadow: 0 4px 12px rgba(71, 50, 196, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
 }
 
 /* =====================================================================
-   8. NAVIGATION FLOTTANTE DU BAS (BOTTOM NAV)
+   9. NAVIGATION DU BAS (BOTTOM NAV)
    ===================================================================== */
 .bottom-nav {
   position: fixed;
@@ -388,12 +456,12 @@
   width: calc(100% - 24px);
   max-width: calc(var(--container-max) - 24px);
   height: var(--nav-height);
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 20px;
   box-shadow: var(--shadow-float);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -450,7 +518,7 @@
 }
 
 /* =====================================================================
-   9. TOASTS & MESSAGES ÉPHÉMÈRES
+   10. TOASTS & MESSAGES ÉPHÉMÈRES
    ===================================================================== */
 #toast-container {
   position: fixed;
@@ -468,11 +536,11 @@
 
 .toast {
   pointer-events: auto;
-  background: #1B1E3A;
+  background: #1E293B;
   color: #FFFFFF;
-  padding: 14px 18px;
+  padding: 13px 16px;
   border-radius: var(--radius-md);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   font-size: var(--fs-sm);
   font-weight: 500;
   display: flex;
@@ -508,7 +576,7 @@
 }
 
 /* =====================================================================
-   10. MODAL DE CONFIRMATION
+   11. MODAL DE CONFIRMATION
    ===================================================================== */
 .modal-backdrop {
   position: fixed;
@@ -568,17 +636,17 @@
 }
 
 /* =====================================================================
-   11. ÉTATS VIDES (EMPTY STATE)
+   12. ÉTATS VIDES (EMPTY STATE)
    ===================================================================== */
 .empty-state {
   text-align: center;
-  padding: 40px 20px;
+  padding: 30px 16px;
   color: var(--text-muted);
 }
 
 .empty-state-icon {
-  font-size: 42px;
-  margin-bottom: 12px;
+  font-size: 38px;
+  margin-bottom: 10px;
   opacity: 0.6;
 }
 

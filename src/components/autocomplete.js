@@ -91,7 +91,7 @@ export function createAutocomplete({
         cursor: pointer; transition: background 0.15s ease;
       `;
 
-      const potBadge = item.pot ? `<span style="font-size: 10px; background: rgba(71, 50, 196, 0.1); color: var(--brand); padding: 2px 6px; border-radius: 999px; font-weight: 700;">${escapeHtml(item.pot)}</span>` : '';
+      const potBadge = item.pot ? `<span style="font-size: 10px; background: rgba(0, 122, 255, 0.1); color: var(--brand); padding: 2px 6px; border-radius: 999px; font-weight: 700;">${escapeHtml(item.pot)}</span>` : '';
       const statutBadge = item.statut ? `<span style="font-size: 10px; background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 2px 6px; border-radius: 999px; font-weight: 700;">${escapeHtml(item.statut)}</span>` : '';
 
       row.innerHTML = `
