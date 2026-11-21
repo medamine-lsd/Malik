@@ -293,7 +293,7 @@ export function createMedecinForm({
     fullWidth: true,
     onClick: () => submitForm()
   });
-  container.appendChild(saveBtn.element);
+  container.appendChild(saveBtn);
 
   // Chargement des puces produits AURA
   async function loadProduitsChips() {

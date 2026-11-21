@@ -35,5 +35,6 @@ export function createButton({
     btn.addEventListener('click', onClick);
   }
 
+  btn.element = btn;
   return btn;
 }
