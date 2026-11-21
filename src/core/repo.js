@@ -26,8 +26,8 @@ export function createRepo(tableName) {
       }
       record.updated_at = now;
 
-      // Normalisation automatique du nom pour les recherches
-      if (record.nom !== undefined) {
+      // Normalisation automatique du nom pour les recherches (uniquement medecins et pharmacies)
+      if ((tableName === 'medecins' || tableName === 'pharmacies') && record.nom !== undefined) {
         record.nom_normalise = normalize(`${record.nom} ${record.prenom || ''}`);
       }
 

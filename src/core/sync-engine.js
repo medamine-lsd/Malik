@@ -78,7 +78,16 @@ export const syncEngine = {
       // Par lots de 100
       for (let i = 0; i < items.length; i += 100) {
         const batch = items.slice(i, i + 100);
-        const payloads = batch.map(b => b.payload);
+        const payloads = batch.map(b => {
+          const p = { ...b.payload };
+          // Supprimer nom_normalise des tables qui n'ont pas cette colonne dans Supabase
+          if (tableName !== 'medecins' && tableName !== 'pharmacies') {
+            delete p.nom_normalise;
+          }
+          delete p.shouldUpdateFiche;
+          delete p._localOnly;
+          return p;
+        });
 
         const { error } = await supabase
           .from(tableName)
