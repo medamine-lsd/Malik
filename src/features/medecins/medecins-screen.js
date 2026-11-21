@@ -27,6 +27,7 @@ export function initMedecinsScreen(container) {
   let todayVisitedMedecinIds = new Set();
   let todayVisitedNames = new Set();
   let activeSpecFilter = 'TOUS';
+  let form = null;
 
   // 1. ZONE 1 — BARRE DE RECHERCHE + BOUTONS D'ACTION (Photo 4)
   const searchSection = document.createElement('div');
@@ -132,7 +133,7 @@ export function initMedecinsScreen(container) {
   container.appendChild(searchSection);
 
   // 2. ZONE 2 — FORMULAIRE DE VISITE (OUVERT PAR DÉFAUT - Photo 4)
-  const form = createMedecinForm({
+  form = createMedecinForm({
     onSaveVisite: async (res) => {
       if (res.error) {
         showToast({ message: res.error, type: 'error' });

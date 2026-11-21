@@ -90,6 +90,48 @@
 }
 
 /* =====================================================================
+   2b. CARTES DE STATISTIQUES (POUR LE RAPPORT)
+   ===================================================================== */
+.stat-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.stat-card.featured {
+  background: var(--brand-gradient);
+  color: var(--text-on-brand);
+  border: none;
+  box-shadow: 0 8px 20px rgba(0, 122, 255, 0.25);
+}
+
+.stat-val {
+  font-family: var(--font-title);
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-card.featured .stat-label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* =====================================================================
    3. CARTES ET FORMULAIRES
    ===================================================================== */
 .card {

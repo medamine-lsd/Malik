@@ -25,6 +25,16 @@ body {
   overflow-x: hidden;
 }
 
+/* Conteneur racine */
+#app {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 /* Cadre mobile centré & ajusté aux téléphones */
 .app-viewport {
   position: relative;

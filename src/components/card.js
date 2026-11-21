@@ -35,7 +35,7 @@ export function createCard({
       const p = document.createElement('div');
       p.innerHTML = child;
       content.appendChild(p);
-    } else if (child instanceof HTMLElement) {
+    } else if (child instanceof Node || (child && child.nodeType)) {
       content.appendChild(child);
     }
   }

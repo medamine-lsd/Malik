@@ -83,6 +83,12 @@ export function initAppShell(rootEl) {
   for (const [key, section] of Object.entries(tabs)) {
     section.className = 'tab-content';
     section.id = `tab-${key}`;
+    if (key === 'medecins') {
+      section.classList.add('active');
+      section.style.display = 'block';
+    } else {
+      section.style.display = 'none';
+    }
     contentArea.appendChild(section);
   }
 
@@ -112,8 +118,10 @@ export function initAppShell(rootEl) {
     for (const [key, section] of Object.entries(tabs)) {
       if (key === target) {
         section.classList.add('active');
+        section.style.display = 'block';
       } else {
         section.classList.remove('active');
+        section.style.display = 'none';
       }
     }
     bottomNav.setActiveTab(target);
